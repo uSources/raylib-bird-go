@@ -1,6 +1,6 @@
 # Flappy bird clone
 
-Flappy bird clone for lerning purpouses
+Flappy bird clone for learning purpouses
 
 ## Media
 
