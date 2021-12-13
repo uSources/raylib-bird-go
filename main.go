@@ -16,16 +16,16 @@ const (
 )
 
 const (
-	screenWidth       = 640
-	screenHeight      = 480
-	screenTitle       = "Flappy GO!"
-	gravity           = 9.8 * 2
-	gameOverText      = "Game over!"
-	gameTitle         = "Flappy Raylib"
-	defaultFontSize   = 32
-	playButtonText    = "Play"
-	optionsButtonText = "Options"
-	menuButtonText    = "Menu"
+	screenWidth     = 640
+	screenHeight    = 480
+	screenTitle     = "Flappy GO!"
+	gravity         = 9.8 * 2
+	gameOverText    = "Game over!"
+	gameTitle       = "Flappy Raylib"
+	defaultFontSize = 32
+	playButtonText  = "Play"
+	exitButtonText  = "Exit"
+	menuButtonText  = "Menu"
 )
 
 var (
@@ -34,7 +34,7 @@ var (
 	floor         = Floor{}
 	pipes         = make([]*PipeGroup, 0)
 	player        = Player{}
-	pointSound    = rl.Sound{}
+	scoreSound    = rl.Sound{}
 	wingSound     = rl.Sound{}
 	dieSound      = rl.Sound{}
 	score         = 0
@@ -73,7 +73,7 @@ func main() {
 
 	dieSound = rl.LoadSound("resources/die.mp3")
 	wingSound = rl.LoadSound("resources/wing.mp3")
-	pointSound = rl.LoadSound("resources/point.mp3")
+	scoreSound = rl.LoadSound("resources/point.mp3")
 
 	resetPlayer()
 	makeFloor()
@@ -108,6 +108,10 @@ func main() {
 		rl.DrawFPS(10, 10)
 		rl.EndDrawing()
 	}
+
+	rl.UnloadSound(dieSound)
+	rl.UnloadSound(wingSound)
+	rl.UnloadSound(scoreSound)
 
 	rl.CloseWindow()
 }
@@ -243,7 +247,7 @@ func updatePipes() {
 		if distance < 0.1 && p.crossed == false {
 			score += 1
 			p.crossed = true
-			rl.PlaySound(pointSound)
+			rl.PlaySound(scoreSound)
 		}
 
 		if p.top.rect.X+float32(p.top.rect.Width) < 0 {
@@ -267,8 +271,8 @@ func drawMenu() {
 	if raygui.Button(rl.NewRectangle(screenWidth/2-40, screenHeight/2, 80, 40), playButtonText) {
 		gameState = RUN
 	}
-	if raygui.Button(rl.NewRectangle(screenWidth/2-40, screenHeight/2+50, 80, 40), optionsButtonText) {
-		gameState = RUN
+	if raygui.Button(rl.NewRectangle(screenWidth/2-40, screenHeight/2+50, 80, 40), exitButtonText) {
+		rl.CloseWindow()
 	}
 }
 
